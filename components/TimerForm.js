@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 
 import TimerButton from "./TimerButton";
+import { on } from "rsvp";
 
 export default class TimerForm extends React.Component {
   constructor(props) {
@@ -22,8 +23,15 @@ export default class TimerForm extends React.Component {
     this.setState({ project });
   };
 
+  handleSubmit = () => {
+    const { onFormSubmit, id } = this.props;
+    const { title, project } = this.state;
+
+    onFormSubmit({ id, title, project });
+  };
+
   render() {
-    const { id } = this.props;
+    const { id, onFormClose } = this.props;
     const { title, project } = this.state;
 
     const submitText = id ? "Atualizar" : "Criar";
@@ -53,8 +61,18 @@ export default class TimerForm extends React.Component {
           </View>
         </View>
         <View style={styles.buttonGroup}>
-          <TimerButton small color="#21BA45" title={submitText} />
-          <TimerButton small color="#DB2828" title="Cancelar" />
+          <TimerButton
+            small
+            color="#21BA45"
+            title={submitText}
+            onPress={this.handleSubmit}
+          />
+          <TimerButton
+            small
+            color="#DB2828"
+            title="Cancelar"
+            onPress={onFormClose}
+          />
         </View>
       </View>
     );
